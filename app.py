@@ -243,7 +243,6 @@ def section_hero(eyebrow: str, title: str, copy: str) -> None:
 
 def sidebar_nav() -> str:
     st.sidebar.markdown("## 🏡 Value Lab")
-    st.sidebar.caption("California housing analysis + prediction")
     page = st.sidebar.radio(
         "Navigate",
         [
@@ -259,7 +258,7 @@ def page_intro(df: pd.DataFrame) -> None:
     section_hero(
         "Introduction / exploration",
         "What explains California neighborhood home values?",
-        "This app explores how income, rooms, occupancy, geography, and neighborhood segments relate to median house value across 20,640 California communities.",
+        "Income, housing structure, and geography are compared against median house value across California communities.",
     )
 
     numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
@@ -275,15 +274,7 @@ def page_intro(df: pd.DataFrame) -> None:
     with l:
         st.markdown("### Dataset preview")
         st.dataframe(df.head(12), width="stretch")
-        st.markdown("### Project story")
-        st.markdown(
-            """
-<div class="success-card">
-<b>Main idea:</b> Home values are not explained by one factor alone. Income is important, but location, household density, rooms, and regional categories all add context. The app is organized so viewers can move from data overview, to visual evidence, to a transparent prediction model.
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+
     with r:
         st.markdown("### Column and data-type guide")
         guide = pd.DataFrame(
@@ -320,7 +311,7 @@ def page_visuals(df: pd.DataFrame) -> None:
     section_hero(
         "Interactive data visualization",
         "A visual story from distribution → drivers → segments → geography.",
-        "Use the visual tabs to explore the data: home values are continuous, income is the strongest simple driver, categorical segments reveal group differences, and geography matters.",
+        "Explore value distributions, drivers, segment differences, geography, and correlations.",
     )
     numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
     categorical_cols = df.select_dtypes(exclude=[np.number]).columns.tolist()
@@ -341,7 +332,6 @@ def page_visuals(df: pd.DataFrame) -> None:
         )
         fig.update_layout(template="plotly_white", yaxis_title="Neighborhood count")
         st.plotly_chart(fig, width="stretch")
-        st.info("The target is a dollar-value measurement, so the prediction task is regression rather than classification.")
 
     with tab2:
         c1, c2, c3 = st.columns(3)
@@ -456,7 +446,7 @@ def page_model(df: pd.DataFrame) -> None:
     section_hero(
         "Linear Regression prediction",
         "Transparent forecasting with metrics, diagnostics, and a live simulator.",
-        "This page uses scikit-learn Linear Regression with numeric scaling and one-hot encoding for categorical variables. It reports model accuracy, diagnostics, coefficients, and an interactive prediction simulator.",
+        "Linear Regression model results, diagnostics, coefficients, and a prediction simulator.",
     )
 
     all_features = NUMERIC_FEATURES + CATEGORICAL_FEATURES
@@ -498,10 +488,6 @@ def page_model(df: pd.DataFrame) -> None:
     m2.metric("MAE", money_from_100k(metrics["mae"]))
     m3.metric("RMSE", money_from_100k(metrics["rmse"]))
     m4.metric("Selected features", len(selected))
-    st.markdown(
-        f"<div class='metric-note'>R² = {metrics['r2']:.3f}, so the selected features explain about {metrics['r2']*100:.1f}% of test-set variation. MAE = {money_from_100k(metrics['mae'])}, meaning the model is off by roughly that amount on average.</div>",
-        unsafe_allow_html=True,
-    )
 
     left, right = st.columns([1, 1])
     with left:
@@ -591,14 +577,6 @@ def page_model(df: pd.DataFrame) -> None:
         unsafe_allow_html=True,
     )
 
-    with st.expander("Model limitations"):
-        st.markdown(
-            """
-- The dataset is historical, so current market prices may differ.
-- Very high values are capped in the data, which creates visible prediction limits.
-- Linear Regression is interpretable, but nonlinear models could improve accuracy later.
-"""
-        )
 
 
 def main() -> None:
