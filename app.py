@@ -1,13 +1,7 @@
 """
-California Housing Value Lab — Streamlit Midterm App
+California Housing Value Lab — Streamlit App
 
-A polished Streamlit midterm project aligned to the course requirements:
-1. Introduction / exploration
-2. Interactive data visualization
-3. Linear Regression prediction with metrics and simulator
-
-Dataset: California Housing, enriched with categorical variables for presentation and modeling.
-Target: MedianHouseValue_100k, a continuous target appropriate for Linear Regression.
+Interactive California housing analysis with visual exploration and Linear Regression prediction.
 """
 
 from __future__ import annotations
@@ -155,7 +149,7 @@ def load_base_data() -> pd.DataFrame:
 
 
 def enrich_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Add assignment-friendly categorical variables and interpretable engineered predictors."""
+    """Add categorical variables and interpretable engineered predictors."""
     out = df.copy()
     out["BedroomRatio"] = out["AveBedrms"] / out["AveRooms"].replace(0, np.nan)
     out["RoomsPerPerson"] = out["AveRooms"] / out["AveOccup"].replace(0, np.nan)
@@ -249,28 +243,14 @@ def section_hero(eyebrow: str, title: str, copy: str) -> None:
 
 def sidebar_nav() -> str:
     st.sidebar.markdown("## 🏡 Value Lab")
-    st.sidebar.caption("Interactive California housing analysis + prediction")
+    st.sidebar.caption("California housing analysis + prediction")
     page = st.sidebar.radio(
-        "Choose a page",
+        "Navigate",
         [
-            "1 · Introduction + Exploration",
-            "2 · Interactive Data Visualization",
-            "3 · Linear Regression Prediction",
+            "Introduction + Exploration",
+            "Interactive Data Visualization",
+            "Linear Regression Prediction",
         ],
-    )
-    st.sidebar.markdown("---")
-    st.sidebar.markdown(
-        """
-**Rubric alignment**
-- 500+ rows and 8+ variables ✅
-- Numerical + categorical variables ✅
-- Continuous target variable ✅
-- Streamlit sections/pages ✅
-- Interactive visuals ✅
-- Linear Regression, R², MAE, RMSE ✅
-- Actual vs predicted plot ✅
-- Prediction simulator ✅
-"""
     )
     return page
 
@@ -279,7 +259,7 @@ def page_intro(df: pd.DataFrame) -> None:
     section_hero(
         "Introduction / exploration",
         "What explains California neighborhood home values?",
-        "This app uses a 20,640-row California housing dataset to explore how income, rooms, occupancy, geography, and categorical neighborhood segments relate to median house value. The target is continuous, so it fits the required Linear Regression project design.",
+        "This app explores how income, rooms, occupancy, geography, and neighborhood segments relate to median house value across 20,640 California communities.",
     )
 
     numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
@@ -295,11 +275,11 @@ def page_intro(df: pd.DataFrame) -> None:
     with l:
         st.markdown("### Dataset preview")
         st.dataframe(df.head(12), width="stretch")
-        st.markdown("### Why this dataset meets the midterm rules")
+        st.markdown("### Project story")
         st.markdown(
             """
 <div class="success-card">
-<b>Checklist:</b> The dataset has far more than 500 rows, more than 8 variables, both numerical and categorical features, and a continuous target variable (<code>MedianHouseValue_100k</code>). It is appropriate for Linear Regression because the model predicts a numeric home-value amount, not a yes/no label.
+<b>Main idea:</b> Home values are not explained by one factor alone. Income is important, but location, household density, rooms, and regional categories all add context. The app is organized so viewers can move from data overview, to visual evidence, to a transparent prediction model.
 </div>
 """,
             unsafe_allow_html=True,
@@ -309,7 +289,7 @@ def page_intro(df: pd.DataFrame) -> None:
         guide = pd.DataFrame(
             {
                 "Column": df.columns,
-                "Presentation meaning": [label(c) for c in df.columns],
+                "Analysis meaning": [label(c) for c in df.columns],
                 "Type": [str(t) for t in df.dtypes],
                 "Missing": [int(df[c].isna().sum()) for c in df.columns],
             }
@@ -340,7 +320,7 @@ def page_visuals(df: pd.DataFrame) -> None:
     section_hero(
         "Interactive data visualization",
         "A visual story from distribution → drivers → segments → geography.",
-        "These visual tabs help the presentation tell a story: home values are continuous, income is the strongest simple driver, categorical segments make patterns easier to explain, and geography matters.",
+        "Use the visual tabs to explore the data: home values are continuous, income is the strongest simple driver, categorical segments reveal group differences, and geography matters.",
     )
     numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
     categorical_cols = df.select_dtypes(exclude=[np.number]).columns.tolist()
@@ -361,7 +341,7 @@ def page_visuals(df: pd.DataFrame) -> None:
         )
         fig.update_layout(template="plotly_white", yaxis_title="Neighborhood count")
         st.plotly_chart(fig, width="stretch")
-        st.info("This is a continuous target, so the prediction task is regression, not classification.")
+        st.info("The target is a dollar-value measurement, so the prediction task is regression rather than classification.")
 
     with tab2:
         c1, c2, c3 = st.columns(3)
@@ -405,7 +385,6 @@ def page_visuals(df: pd.DataFrame) -> None:
         fig.update_traces(texttemplate="%{text:.2f}", textposition="outside")
         fig.update_layout(template="plotly_white", showlegend=False)
         st.plotly_chart(fig, width="stretch")
-        st.caption("This bar chart shows how categorical segments connect to differences in average value.")
 
     with tab4:
         age_summary = df.groupby("HouseAge", as_index=False)[TARGET].mean()
@@ -419,7 +398,6 @@ def page_visuals(df: pd.DataFrame) -> None:
         )
         fig.update_layout(template="plotly_white")
         st.plotly_chart(fig, width="stretch")
-        st.caption("This satisfies the line-chart option while showing that age alone does not explain all value variation.")
 
     with tab5:
         region_filter = st.multiselect(
@@ -478,7 +456,7 @@ def page_model(df: pd.DataFrame) -> None:
     section_hero(
         "Linear Regression prediction",
         "Transparent forecasting with metrics, diagnostics, and a live simulator.",
-        "This page uses scikit-learn Linear Regression with numeric scaling and one-hot encoding for categorical variables. It reports R², MAE, RMSE, actual-vs-predicted diagnostics, coefficients, and an interactive prediction simulator.",
+        "This page uses scikit-learn Linear Regression with numeric scaling and one-hot encoding for categorical variables. It reports model accuracy, diagnostics, coefficients, and an interactive prediction simulator.",
     )
 
     all_features = NUMERIC_FEATURES + CATEGORICAL_FEATURES
@@ -579,7 +557,6 @@ def page_model(df: pd.DataFrame) -> None:
     st.dataframe(coef.round(3), width="stretch", hide_index=True)
 
     st.markdown("### Live prediction simulator")
-    st.caption("Set a hypothetical neighborhood profile. The app then estimates median house value using the same preprocessing pipeline as the trained model.")
     sim_inputs: Dict[str, object] = {}
     cols = st.columns(3)
     for i, f in enumerate(BASE_NUMERIC):
@@ -609,19 +586,17 @@ def page_model(df: pd.DataFrame) -> None:
         f"""
 <div class="story-card">
 <h3 style="margin-top:0">Predicted median home value: {money_from_100k(pred_value)}</h3>
-<p>This simulator is a strong bonus feature because it turns the regression model into a usable decision-support tool instead of only reporting a score.</p>
 </div>
 """,
         unsafe_allow_html=True,
     )
 
-    with st.expander("Model honesty / limitations to mention for an A-level presentation"):
+    with st.expander("Model limitations"):
         st.markdown(
             """
 - The dataset is historical, so current market prices may differ.
 - Very high values are capped in the data, which creates visible prediction limits.
-- Linear Regression is interpretable and required for the assignment, but nonlinear models could improve accuracy later.
-- R² is variation explained; it is not a promise that every individual prediction is exact.
+- Linear Regression is interpretable, but nonlinear models could improve accuracy later.
 """
         )
 
@@ -629,11 +604,11 @@ def page_model(df: pd.DataFrame) -> None:
 def main() -> None:
     df = load_data()
     page = sidebar_nav()
-    if page.startswith("1"):
+    if page.startswith("Introduction"):
         page_intro(df)
-    elif page.startswith("2"):
+    elif page.startswith("Interactive"):
         page_visuals(df)
-    elif page.startswith("3"):
+    elif page.startswith("Linear"):
         page_model(df)
 
 

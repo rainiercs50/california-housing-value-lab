@@ -1,29 +1,37 @@
 # Presentation Notes — California Housing Value Lab
 
-## 1. Hook / business case
-Our app helps a real-estate analyst understand which neighborhood characteristics are linked to higher California median home values and estimate value for a new area.
+Use these notes as your private speaking guide. They are not displayed inside the app.
 
-## 2. Data overview
-- Rows: 20,640
-- Input features: 8
-- Target: `MedianHouseValue_100k`
-- Target type: continuous, which fits the project requirement to use linear regression.
-- Missing values: none.
+## 1. Opening
 
-## 3. Visual story
-- Start with the target distribution to show the range of values.
-- Use the scatter plot to show that median income has a strong relationship with median home value.
-- Use the map to show location patterns: coastal and metro areas generally have higher values.
-- Use the correlation matrix to identify strongest relationships and possible noisy variables.
+Today I am presenting the California Housing Value Lab. The goal is to understand what neighborhood characteristics are connected to higher median home values, and then use those patterns to make a transparent value prediction.
 
-## 4. Model story
-- The model is Linear Regression from scikit-learn.
-- R-squared explains how much of the target variation is explained by the selected features.
-- MAE and RMSE show prediction error in dollars.
-- The actual-vs-predicted plot shows where the model is accurate and where it misses.
-- The simulator lets the audience change feature values and get a predicted median home value.
+## 2. Dataset overview
 
-## 5. Improvements
-- Add richer local economic data, school ratings, commute time, and current market conditions.
-- Remove noisy variables or add more useful ones to improve R-squared and reduce prediction error.
-- Later, compare nonlinear models, but keep linear regression for the midterm requirement.
+The dataset contains 20,640 California communities. It includes income, house age, rooms, bedrooms, population, occupancy, latitude, longitude, engineered ratios, and categorical segments such as income band, coastal category, age group, and region. The target is median house value measured in 100,000-dollar units.
+
+## 3. Visual findings
+
+Start with the target distribution. The values are not perfectly normal, and there is a visible high-value cap.
+
+Then show the scatter explorer. Median income has the clearest positive relationship with home value. Higher-income communities generally have higher median values.
+
+Next, show the categorical bar chart. The categories make the story easier to explain because high-income and coastal/region groups tend to show higher average values.
+
+Then show the map. Geography matters because expensive areas cluster near certain coastal and metro regions.
+
+Finally, show the correlation tab. This supports why income and location belong in the model.
+
+## 4. Model explanation
+
+The model is Linear Regression. Numeric variables are scaled and categorical variables are one-hot encoded. The main metric is R², which means the percentage of variation in home values explained by the selected features. MAE and RMSE show the average size of prediction errors in dollars.
+
+Do not say the model is perfect. Say it is useful because it is interpretable and connects the visuals to a prediction.
+
+## 5. Simulator demo
+
+Use the simulator to change a realistic input such as median income or region. Explain that the prediction updates because the same trained model is being applied to the hypothetical neighborhood profile.
+
+## 6. Conclusion
+
+The strongest pattern is that income is closely connected to home value, but geography and household structure also matter. Linear Regression gives a clear first prediction model. The main limitations are that the data is historical, high values are capped, and housing markets are more complex than a linear model can fully capture.
