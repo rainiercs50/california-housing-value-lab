@@ -1,0 +1,84 @@
+
+ 
+   
+Mid Term Project
+
+
+
+Mid Term Project
+
+🎯 The Goal: Create an app that solves a business problem of your choice
+
+🚀 Team: 2-3 students
+
+🎙 Speech: 10 th of March
+
+⭐️ Tasks’ Descriptions
+
+Plan the the design of your app you could use: https://www.figma.com/fr/
+
+Create a page in Streamlit with the Business Case Presentation and the Data Presentation
+
+Create a page in Streamlit with the Data Visualization
+
+Create a page in Streamlit with model prediction
+
+The presentation will be a 8 min presentations were all team members should speak. You will use your app as a support to your speech
+
+⏳ Timeline
+
+01 - Set Teams - Thursday 02/03
+
+02 - Find Dataset/Problem to solve - Tuesday 07/03
+
+03 - Build Landing Page describing the data - Thursday 09/03
+
+04 - Build Data Visualization Page - Tuesday 14/03
+
+05 - Build the Forecast Page - Thursday 16/03
+
+06 - Speech Day - Tuesday 21/03
+
+🛠 Technologies
+
+➡️ The structure of the app: Streamlit
+
+➡️ The data loading, processing : NumPy and Pandas
+
+➡️ The visualization part: Looker, Seaborn, Matplotlib
+
+➡️ The Model Part: Linear Regression with Scikit-Learn
+
+💡 Inspirations
+
+01 Data source
+
+Find Open Datasets and Machine Learning Projects | Kaggle
+
+Dataset Search
+
+There are 25 csv datasets available on data.world.
+
+02 APP
+
+link1:
+
+salesPredApp 2.zip
+
+
+
+
+
+
+
+
+
+
+
+03 Useful Links
+
+Build Your First Data Visualization Web App in Python Using Streamlit
+
+Streamlit | Create Interactive Dashboards With Streamlit
+
+Congrats you made it 🎉
