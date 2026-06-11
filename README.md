@@ -1,6 +1,6 @@
 # California Housing Value Lab — Streamlit Midterm Project
 
-A polished Streamlit midterm app that analyzes California housing data and predicts median neighborhood house value with Linear Regression.
+A Streamlit midterm app that analyzes California housing data and predicts median neighborhood house value with Linear Regression.
 
 ## Project story
 
